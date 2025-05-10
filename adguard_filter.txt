@@ -1,0 +1,12 @@
+! Apr 29, 2025 https://www.zhihu.com
+www.zhihu.com##.css-15m2p8i
+||pica.zhimg.com/80/v2-ccdb7828c12afff31a27e51593d23260_720w.png$image
+
+! Apr 30, 2025 https://gemini.google.com
+gemini.google.com##.bot-list-item--selected.ng-star-inserted.bot-list-item--expanded.ng-tns-c1316433884-9 > .ng-star-inserted.bot-item > .bot-new-conversation-button.mat-mdc-tooltip-trigger
+gemini.google.com##.bot-new-conversation-button.mat-mdc-tooltip-trigger
+
+! May 10, 2025 https://www.bilibili.com
+www.bilibili.com##.adblock-tips
+! www.bilibili.com##div.feed-card:nth-of-type(7)
+! www.bilibili.com##div.is-rcmd.bili-video-card:nth-of-type(19)
