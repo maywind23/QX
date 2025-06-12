@@ -1,0 +1,58 @@
+# Main domain
+DOMAIN-SUFFIX,chatgpt.com
+DOMAIN-SUFFIX,oaistatic.com
+DOMAIN-SUFFIX,oaiusercontent.com
+DOMAIN-SUFFIX,openai.com
+DOMAIN-SUFFIX,sora.com
+
+# CDN & API
+DOMAIN-SUFFIX,openai.com.cdn.cloudflare.net
+DOMAIN,openaiapi-site.azureedge.net
+DOMAIN,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
+DOMAIN,openaicomproductionae4b.blob.core.windows.net
+DOMAIN,production-openaicom-storage.azureedge.net
+
+# tracking
+DOMAIN,o33249.ingest.sentry.io
+DOMAIN,openaicom.imgix.net
+DOMAIN,browser-intake-datadoghq.com
+
+# Advanced Voice
+DOMAIN-SUFFIX,livekit.cloud
+
+
+# > OpenAI/ChatGPT
+DOMAIN-SUFFIX,openai.com
+DOMAIN-SUFFIX,auth0.openai.com
+DOMAIN,*.auth.openai.com
+DOMAIN,setup.auth.openai.com
+DOMAIN-SUFFIX,chat.openai.com
+DOMAIN,tcr9i.chat.openai.com
+DOMAIN-SUFFIX,chatgpt.com
+DOMAIN-SUFFIX,oaiusercontent.com
+DOMAIN-SUFFIX,oaistatic.com
+DOMAIN-SUFFIX,statsig.com
+DOMAIN-SUFFIX,statsigapi.net
+DOMAIN,events.statsigapi.net
+DOMAIN-SUFFIX,featuregates.org
+DOMAIN-SUFFIX,intercomcdn.com
+DOMAIN,js.intercomcdn.com
+DOMAIN-SUFFIX,intercom.io
+DOMAIN,js.stripe.com
+DOMAIN,challenges.cloudflare.com
+DOMAIN,rum.browser-intake-datadoghq.com
+DOMAIN,o33249.ingest.sentry.io
+DOMAIN,ios.chat.openai.com
+DOMAIN,android.chat.openai.com
+DOMAIN,desktop.chat.openai.com
+DOMAIN-SUFFIX,prodregistryv2.org
+DOMAIN-SUFFIX,featureassets.org
+DOMAIN,setup.workos.com
+DOMAIN,events.launchdarkly.com
+DOMAIN,forwarder.workos.com
+DOMAIN,clientstream.launchdarkly.com
+DOMAIN,app.launchdarkly.com
+DOMAIN,o207216.ingest.sentry.io
+DOMAIN-SUFFIX,workos.imgix.net
+DOMAIN-SUFFIX,cdn.workos.com
+DOMAIN-SUFFIX,images.workoscdn.com
