@@ -1,0 +1,31 @@
+#!name=YouTube Adblock
+#!desc=用于 YouTube 视频、瀑布流、搜索、播放页、短视频及贴片广告、视频自动PIP、后台播放、自动翻译。根据 @DivineEngine, @app2smile, @Maasea, @VirgilClyne 的配置转换。最后更新: 2025-03-09。
+# ===================================================================
+# 注意：
+# 1. 不适用于允许 UDP 转发的节点及 Premium 用户。
+# 2. 如果视频广告仍然存在，请在 Surge 配置文件的 [General] 部分下添加 `udp-policy-not-supported-by-server = reject`。
+# 3. 点开YouTube视频的瞬间，退出APP，即可无PIP播放，适合单纯听音频的用户。
+# 4. https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/YoutubeAds.conf
+# ===================================================================
+
+[MITM]
+hostname = %APPEND% *.googlevideo.com, www.youtube.com, s.youtube.com, youtubei.googleapis.com
+
+[Script]
+# > 视频PIP|后台播放|瀑布流|搜索页|播放页|短视频|贴片广告
+youtube_main_script = type=http-response,script-path=https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/Script/Youtube/youtube.response.js,requires-body=true,timeout=10
+
+[Rule]
+# ======= 视频广告请求 ======= #
+# > 移除 ctier=L 参数，防止广告加载
+URL-REWRITE ^(https?:\/\/[\w-]+\.googlevideo\.com\/(?!dclk_video_ads).+?)&ctier=L(&.+?),ctier,(.+) $1$2$3 302
+# > 屏蔽 oad 参数的广告请求
+URL-REJECT ^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(dclk_video_ads|videoplayback\?)).+&oad
+
+# ======= 视频PIP|后台播放|瀑布流|搜索页|播放页|短视频|贴片广告 ======= #
+http-response ^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch) requires-body=true,script-path=youtube_main_script
+
+# ======= 通用广告请求 ======= #
+URL-REJECT ^https?:\/\/(www|s)\.youtube\.com\/api\/stats\/ads
+URL-REJECT ^https?:\/\/(www|s)\.youtube\.com\/(pagead|ptracking)
+URL-REJECT ^https?:\/\/s\.youtube\.com\/api\/stats\/qoe\?adcontext
