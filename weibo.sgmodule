@@ -1,0 +1,98 @@
+#!name=Weibo
+#!desc=微博、微博国际版净化，去除广告和推广。作者: @ddgksf2013。
+
+# ===================================================================
+# 注意：
+# 1. 此文件由 Quantumult X 配置文件自动转换而来，仅供学习交流使用。https://github.com/sve1r/Rules-For-Quantumult-X/blob/main/Rewrite/AdBlock/Weibo.adblock
+# 2. 原作者注释中提到的需手动添加的分流 `host, sdkapp.uve.weibo.com, direct`
+#    在 Surge 中通常通过规则顺序控制，确保其不匹配代理规则即可。
+# ===================================================================
+
+[MITM]
+hostname = %APPEND% api.weibo.*, *.api.weibo.*, mapi.weibo.*, *.uve.weibo.com, new.vip.weibo.cn, boot.biz.weibo.com
+
+[Script]
+# 主要净化脚本
+weibo_main = type=http-response,script-path=https://r.sveir.xyz/Scripts/AdBlock/Weibo/weibo.min.js,requires-body=true,timeout=10
+# 国际版搜索相关静态响应
+weibo_search_info = type=http-response,script-path=https://r.sveir.xyz/Scripts/AdBlock/Weibo/weibo_search_info.json,requires-body=true,timeout=10
+weibo_search_topic = type=http-response,script-path=https://r.sveir.xyz/Scripts/AdBlock/Weibo/weibo_search_topic.json,requires-body=true,timeout=10
+
+[Rule]
+# ======= 微博国内版 - 拦截规则 ======= #
+# > 启动感兴趣弹窗
+URL-REJECT-DICT ^https?:\/\/api\.weibo\.cn\/.*account\/recommend_interesttags
+# > 首页顶部直播推荐Tab
+URL-REJECT ^https?:\/\/api\.weibo\.cn\/.*\/media_homelist
+# > 搜索页默认填充词
+URL-REJECT ^https?:\/\/api\.weibo\.cn\/.*finder\/searchbarchange
+# > AD_Preload
+URL-REJECT-DICT ^https?:\/\/api\.weibo\.cn\/\d\/ad\/preload
+# > 用户推荐弹窗
+URL-REJECT-DICT ^https?:\/\/api\.weibo\.cn\/\d\/profile\/recommend_popuser
+# > 每日一次的开屏广告请求
+URL-REJECT ^https?:\/\/boot.*weibo\.com\/v\d\/ad\/realtime
+# > 去除底部超话栏表层浮icon及tips
+URL-REJECT-DICT ^https?:\/\/api\.weibo\.cn\/.*discovery_home_bottom_getdotinfo
+# > 屏蔽首页左上角每日的弹窗tips
+URL-REJECT-DICT ^https?:\/\/m?api\.weibo\.c(n|om)\/\d/push/daily
+# > 应用内弹窗广告
+URL-REJECT ^https?:\/\/(preload-click|preload-impression)\.uve\.weibo\.com\/(interface\/wbpullad\/wbpullad_click\.php|wbapplua\/get_wbpullad_log\.lua)
+# > 屏蔽sdkconfig请求
+URL-REJECT ^https?:\/\/sdkapp\.uve\.weibo\.com\/interface\/sdk\/sdkconfig\.php
+# > Spotlight
+URL-REJECT-DICT ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/hot\/hours_spotlight
+
+# ======= 微博国际版 - 拦截规则 ======= #
+# > 趋势页热门影片
+URL-REJECT-DICT ^https?:\/\/api\.weibo\.cn\/\d\/cardlist\?v_f=.*Weibo_intl
+# > 屏蔽hotsearch
+URL-REJECT-DICT ^https?:\/\/weibointl\.api\.weibo\.c(n|om)\/portal\.php\?a=hot_search_users
+# > 屏蔽热推荐
+URL-REJECT-DICT ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/ad\/weibointl\?
+
+# ======= 微博国内版 - 脚本规则 ======= #
+# > 首页顶部homeExtend
+http-response ^https?:\/\/api\.weibo\.cn\/\d\/groups\/allgroups\/v\d requires-body=true,script-path=weibo_main
+# > 开屏广告预加载处理
+http-response ^https?:\/\/boot.*weibo\.com\/v\d\/ad\/preload requires-body=true,script-path=weibo_main
+http-response ^https?:\/\/bootpreload.uve.weibo\.com\/v\d\/ad\/preload requires-body=true,script-path=weibo_main
+# > 未登陆状态下首页信息流处理
+http-response ^https?:\/\/api\.weibo\.cn\/\d\/\w{5}\/(statuses_unread_hot_timeline|timeline) requires-body=true,script-path=weibo_main
+# > 视频信息处理
+http-response ^https?:\/\/api\.weibo\.cn\/\d\/video\/tiny_stream_mid_detail requires-body=true,script-path=weibo_main
+# > 屏蔽发现页面搜索框热词
+http-response ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/\w{5}\/cardlist requires-body=true,script-path=weibo_main
+# > 自定义tab皮肤
+http-response ^https://api.weibo.cn/2/!/client/light_skin requires-body=true,script-path=weibo_main
+# > 非会员设置tab皮肤
+http-response ^https://new.vip.weibo.cn/littleskin/preview requires-body=true,script-path=weibo_main
+# > 去广告以及去除各部分推广模块 (多合一)
+http-response ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/(searchall|page\?|messageflow) requires-body=true,script-path=weibo_main
+http-response ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/statuses/(unread_)?friends(/|_)timeline requires-body=true,script-path=weibo_main
+http-response ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/groups/timeline requires-body=true,script-path=weibo_main
+http-response ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/statuses/container_detail_comment requires-body=true,script-path=weibo_main
+http-response ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/statuses/(container_timeline|container_detail|unread_hot_timeline|extend|video_mixtimeline|unread_topic_timeline) requires-body=true,script-path=weibo_main
+http-response ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/profile/(me|container_timeline) requires-body=true,script-path=weibo_main
+http-response ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/video/(community_tab|remind_info|tiny_stream_video_list) requires-body=true,script-path=weibo_main
+http-response ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/search/(finder|container_timeline|container_discover) requires-body=true,script-path=weibo_main
+http-response ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/(checkin/show|\!/live/media_homelist|comments/build_comments|container/get_item) requires-body=true,script-path=weibo_main
+http-response ^https?:\/\/m?api\.weibo\.c(n|om)\/\d\/cardlist requires-body=true,script-path=weibo_main
+
+# ======= 微博国际版 - 脚本规则 ======= #
+# > 帖子下方广告banner
+http-response ^https?:\/\/weibointl\.api\.weibo\.cn\/portal\.php\?a=open_app requires-body=true,script-path=weibo_main
+# > 屏蔽searching_info
+http-response ^https?:\/\/weibointl\.api\.weibo\.c(n|om)\/portal\.php.*a=get_searching_info requires-body=true,script-path=weibo_search_info
+# > 屏蔽search_topic
+http-response ^https?:\/\/weibointl\.api\.weibo\.c(n|om)\/portal\.php.*feed&a=search_topic requires-body=true,script-path=weibo_search_topic
+# > 屏蔽开屏广告
+http-response ^https?:\/\/weibointl\.api\.weibo\.c(n|om)\/portal\.php.*get_coopen_ads requires-body=true,script-path=weibo_main
+# > 屏蔽sdkad
+http-response ^https?://(sdk|wb)app\.uve\.weibo\.com(/interface/sdk/sdkad.php|/wbapplua/wbpullad.lua) requires-body=true,script-path=weibo_main
+# > 趋势顶部Card去广告
+http-response ^https?:\/\/weibointl\.api\.weibo\.c(n|om)\/portal\.php.*a=trends requires-body=true,script-path=weibo_main
+# > 屏蔽用户VIP栏
+http-response ^https?:\/\/weibointl\.api\.weibo\.cn\/portal\.php\?a=user_center requires-body=true,script-path=weibo_main
+# > 热搜处理
+http-response ^https?:\/\/weibointl\.api\.weibo\.cn\/portal\.php\?a=search_topic requires-body=true,script-path=weibo_main
