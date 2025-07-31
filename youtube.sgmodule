@@ -9,24 +9,27 @@
 # 5. 根据 @DivineEngine, @app2smile, @Maasea, @VirgilClyne 的配置转换。最后更新: 2025-03-09。
 # ===================================================================
 
+
 [MITM]
-hostname = %APPEND% *.googlevideo.com, www.youtube.com, s.youtube.com, youtubei.googleapis.com
+hostname = *.googlevideo.com, www.youtube.com, s.youtube.com, youtubei.googleapis.com
+# 说明：原脚本排除了 redirector*.googlevideo.com，这里直接不写即可。
+
+[URL Rewrite]
+# === 视频广告 URL 参数清洗 ===
+^https?:\/\/[\w-]+\.googlevideo\.com\/(?!dclk_video_ads).+?&ctier=L(&.+?),ctier,(.+) 302 $1$2$3
+
+# === 视频广告文件直接阻断 ===
+^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(dclk_video_ads|videoplayback\?)).+&oad reject-200
+
+# === 通用广告统计 & 贴片请求阻断 ===
+^https?:\/\/(www|s)\.youtube\.com\/api\/stats\/ads                    reject-200
+^https?:\/\/(www|s)\.youtube\.com\/(pagead|ptracking)                 reject-200
+^https?:\/\/s\.youtube\.com\/api\/stats\/qoe\?adcontext               reject-200
 
 [Script]
-# > 视频PIP|后台播放|瀑布流|搜索页|播放页|短视频|贴片广告
-youtube_main_script = type=http-response,script-path=https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/Script/Youtube/youtube.response.js,requires-body=true,timeout=10
+# === PIP / 后台播放 / 搜索页 / 短视频 / 播放页广告拦截 ===
+yt_block_ads = type=http-response,pattern=^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch),requires-body=true,script-path=https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/Script/Youtube/youtube.response.js,timeout=60
 
 [Rule]
-# ======= 视频广告请求 ======= #
-# > 移除 ctier=L 参数，防止广告加载
-URL-REWRITE ^(https?:\/\/[\w-]+\.googlevideo\.com\/(?!dclk_video_ads).+?)&ctier=L(&.+?),ctier,(.+) $1$2$3 302
-# > 屏蔽 oad 参数的广告请求
-URL-REJECT ^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(dclk_video_ads|videoplayback\?)).+&oad
-
-# ======= 视频PIP|后台播放|瀑布流|搜索页|播放页|短视频|贴片广告 ======= #
-http-response ^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch) requires-body=true,script-path=youtube_main_script
-
-# ======= 通用广告请求 ======= #
-URL-REJECT ^https?:\/\/(www|s)\.youtube\.com\/api\/stats\/ads
-URL-REJECT ^https?:\/\/(www|s)\.youtube\.com\/(pagead|ptracking)
-URL-REJECT ^https?:\/\/s\.youtube\.com\/api\/stats\/qoe\?adcontext
+# 如需限定节点，可在此处新增 DOMAIN 规则；默认全局生效
+; DOMAIN-KEYWORD,youtube,DIRECT
