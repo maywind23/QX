@@ -1,11 +1,12 @@
 #!name=YouTube Adblock
-#!desc=用于 YouTube 视频、瀑布流、搜索、播放页、短视频及贴片广告、视频自动PIP、后台播放、自动翻译。根据 @DivineEngine, @app2smile, @Maasea, @VirgilClyne 的配置转换。最后更新: 2025-03-09。
+#!desc=YouTube视频、瀑布流、搜索、播放页、短视频及贴片广告、视频自动PIP、后台播放、自动翻译。
 # ===================================================================
 # 注意：
 # 1. 不适用于允许 UDP 转发的节点及 Premium 用户。
 # 2. 如果视频广告仍然存在，请在 Surge 配置文件的 [General] 部分下添加 `udp-policy-not-supported-by-server = reject`。
 # 3. 点开YouTube视频的瞬间，退出APP，即可无PIP播放，适合单纯听音频的用户。
 # 4. https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/YoutubeAds.conf
+# 5. 根据 @DivineEngine, @app2smile, @Maasea, @VirgilClyne 的配置转换。最后更新: 2025-03-09。
 # ===================================================================
 
 [MITM]
