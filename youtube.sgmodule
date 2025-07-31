@@ -29,7 +29,3 @@ hostname = *.googlevideo.com, www.youtube.com, s.youtube.com, youtubei.googleapi
 [Script]
 # === PIP / 后台播放 / 搜索页 / 短视频 / 播放页广告拦截 ===
 yt_block_ads = type=http-response,pattern=^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch),requires-body=true,script-path=https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/Script/Youtube/youtube.response.js,timeout=60
-
-[Rule]
-# 如需限定节点，可在此处新增 DOMAIN 规则；默认全局生效
-; DOMAIN-KEYWORD,youtube,DIRECT
